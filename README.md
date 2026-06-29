@@ -3,7 +3,7 @@
 Two ways to complete the Jackie Jeans **Fit Quiz**, then a seamless hand-off to
 the main store. Built for the Humanity Founders hackathon.
 
-**Live:** _add your Vercel URL here_
+**Live:** https://jackie-onboarding-zeta.vercel.app
 **Hands off to:** https://jackie-jeans.vercel.app/
 
 ## What's inside
