@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jackie Jeans — Smart Fit Onboarding
 
-## Getting Started
+Two ways to complete the Jackie Jeans **Fit Quiz**, then a seamless hand-off to
+the main store. Built for the Humanity Founders hackathon.
 
-First, run the development server:
+**Live:** _add your Vercel URL here_
+**Hands off to:** https://jackie-jeans.vercel.app/
+
+## What's inside
+
+- **Manual onboarding** (`/onboarding/manual`) — a calm, mobile-first quiz: **dropdowns**
+  for measurements, single-select cards, multi-select brands, optional skip,
+  and conditional per-brand sizing. One question at a time, progress, and a
+  **review screen to edit any answer** before finishing.
+- **AI voice onboarding** (`/onboarding/voice`) — a real voice-to-voice stylist. It
+  **speaks** each question, **listens**, **confirms** ("Got it — waist 30."),
+  re-asks when unclear, handles multi-select brands and per-brand sizes by
+  voice, and gracefully skips the optional weight question.
+- **Completion** (`/complete`) — an explainable fit recommendation, an answer
+  summary, and a reliable redirect that **carries the fit profile across** to
+  the main site (readable query params + a compact `fit` blob).
+
+All **10 quiz questions are present in both flows**, driven from one shared
+definition in [`lib/quiz.ts`](lib/quiz.ts) so the two flows can never drift.
+
+## Voice stack (free, no key required)
+
+| Concern | Approach |
+| --- | --- |
+| Speak questions | Browser `speechSynthesis` (works on iOS too) |
+| Hear answers (Android / desktop) | Web Speech API `webkitSpeechRecognition` — free, no key |
+| Hear answers (**iPhone** / Firefox) | Records the mic and transcribes via **Groq Whisper** (`/api/voice/transcribe`) — needs `GROQ_API_KEY` (free tier) |
+| Understand answers | On-device rule parser ([`lib/parse.ts`](lib/parse.ts)) — word→number, "five foot six"→5'6″, fuzzy option/brand matching, skip detection |
+| Always-on safety net | If no key / mic is blocked, questions are still spoken aloud and answers can be typed — the flow always completes |
+
+**Works on all phones** when `GROQ_API_KEY` is set (see `.env.example`). Without
+it, Android/desktop Chrome are still full voice-to-voice; iPhone falls back to
+spoken-questions + typed-answers.
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy (Vercel)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm i -g vercel
+vercel            # first time: log in + link
+vercel --prod     # production deploy → live link
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+No environment variables are required. `GROQ_API_KEY` is optional (see
+`.env.example`).
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion.
