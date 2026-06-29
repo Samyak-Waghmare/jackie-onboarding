@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
+@theme {
+  /* Denim palette — premium, warm, confident */
+  --color-cream: #f5f1ea;
+  --color-paper: #fbfaf6;
+  --color-ink: #1a1714;
+  --color-denim: #21314d;
+  --color-denim-700: #2c3f61;
+  --color-denim-500: #3a5079;
+  --color-denim-200: #c4cedd;
+  --color-stitch: #c97b42;
+  --color-stitch-soft: #ecd2b4;
+  --color-muted: #756f68;
+  --color-line: #e6ded2;
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+
+  --radius-xl2: 1.75rem;
+
+  --animate-pulse-ring: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-rise: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+/* A faint denim-paper texture so flat color never feels clinical */
+.bg-canvas {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(58, 80, 121, 0.06), transparent 40%),
+    radial-gradient(circle at 84% 86%, rgba(201, 123, 66, 0.07), transparent 42%);
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+}
+
+/* Dashed "stitch" underline used as a premium denim detail */
+.stitch-line {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-stitch) 0 8px,
+    transparent 8px 14px
+  );
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbars on the inline pickers but keep them scrollable */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
